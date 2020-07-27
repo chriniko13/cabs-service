@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <modules>
+        <module>booking-consumer</module>
+        <module>booking-producer</module>
+        <module>booking-domain</module>
+        <module>booking-common-infra</module>
+        <module>data-injector</module>
+        <module>e2e-tests</module>
+    </modules>
+
+
+    <groupId>com.chriniko</groupId>
+    <artifactId>ecabs-service</artifactId>
+    <version>1.0.0-SNAPSHOT</version>
+    <name>ecabs-service</name>
+
+    <packaging>pom</packaging>
+
+</project>
