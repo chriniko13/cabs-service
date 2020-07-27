@@ -62,6 +62,10 @@ TODO
 2) `mvn clean install`
 3) `java -jar target/booking-producer-1.0.0.jar`
 
+##### Important Note
+In order to create queues and exchanges automatically (via spring bootstrapping) you should start first this
+service (booking-producer)
+
 
 #
 
