@@ -56,6 +56,10 @@ TODO
 2) `mvn clean install`
 3) `java -jar target/booking-consumer-1.0.0.jar`
 
+##### Important Note
+For consumption from RabbitMQ and saving to PostgreSQL I have applied Best-Effort 1PC(Phase Commit)
+more info: `https://www.infoworld.com/article/2077963/distributed-transactions-in-spring--with-and-without-xa.html`
+
 
 #### Build and run booking-producer (needs infrastructure to be up)
 1) `cd booking-producer/`
