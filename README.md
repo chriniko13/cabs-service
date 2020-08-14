@@ -40,7 +40,7 @@ of the whole application-platform
 
 
 
-#### Run E2E Tests (needs infrastructure to be up) TODO FIX
+#### Run E2E Tests (needs infrastructure to be up)
 1) You need to have run infrastructure (rabbitmq and postgresql), producer and consumer services also.
 2) `cd data-injector/` and execute there: `mvn clean install`
 2) `cd e2e-tests/`
