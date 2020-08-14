@@ -73,7 +73,9 @@ public class Booking {
 	}
 
 	public void addTripWayPoint(List<TripWaypoint> tripWaypoints) {
-		tripWaypoints.forEach(this::addTripWayPoint);
+		for (TripWaypoint tripWaypoint : tripWaypoints) {
+			addTripWayPoint(tripWaypoint);
+		}
 	}
 
 	public void removeAllTripWaypoints() {

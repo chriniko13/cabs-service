@@ -43,11 +43,15 @@ public class DeleteBookingClient extends Client implements Scenario {
 		}
 
 		// delete section
-		ResponseEntity<String> result = restTemplate.exchange("http://localhost:8081/bookings/" + recordIdToDelete, HttpMethod.DELETE, null, String.class);
+		ResponseEntity<String> result = deleteBooking(recordIdToDelete, restTemplate);
 
 		if (result.getStatusCode() != HttpStatus.OK) {
 			LOG.error("delete booking client operation was not successful");
 		}
 
+	}
+
+	public static ResponseEntity<String> deleteBooking(String recordIdToDelete, RestTemplate restTemplate) {
+		return restTemplate.exchange("http://localhost:8081/bookings/" + recordIdToDelete, HttpMethod.DELETE, null, String.class);
 	}
 }

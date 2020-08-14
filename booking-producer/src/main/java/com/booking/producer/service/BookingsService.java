@@ -49,14 +49,6 @@ public class BookingsService {
 		return id;
 	}
 
-	private byte[] getBytes(Object input) {
-		try {
-			return objectMapper.writeValueAsBytes(input);
-		} catch (JsonProcessingException e) {
-			throw new InfrastructureException(e);
-		}
-	}
-
 	public void deleteBooking(DeleteBooking cmd) {
 		byte[] data = getBytes(cmd);
 
@@ -85,4 +77,11 @@ public class BookingsService {
 		);
 	}
 
+	private byte[] getBytes(Object input) {
+		try {
+			return objectMapper.writeValueAsBytes(input);
+		} catch (JsonProcessingException e) {
+			throw new InfrastructureException(e);
+		}
+	}
 }

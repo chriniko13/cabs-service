@@ -40,8 +40,11 @@ of the whole application-platform
 
 
 
-#### Run E2E Tests (needs infrastructure to be up)
-TODO
+#### Run E2E Tests (needs infrastructure to be up) TODO FIX
+1) You need to have run infrastructure (rabbitmq and postgresql), producer and consumer services also.
+2) `cd data-injector/` and execute there: `mvn clean install`
+2) `cd e2e-tests/`
+3) `mvn clean test`
 
 
 #### Building prerequisites for producer and consumer service
@@ -59,6 +62,7 @@ TODO
 ##### Important Note
 For consumption from RabbitMQ and saving to PostgreSQL I have applied Best-Effort 1PC(Phase Commit)
 more info: `https://www.infoworld.com/article/2077963/distributed-transactions-in-spring--with-and-without-xa.html`
+and consumption operations are idempotent [@IdempotentOperation](booking-consumer/src/main/java/com/booking/consumer/doc/IdempotentOperation.java)
 
 
 #### Build and run booking-producer (needs infrastructure to be up)

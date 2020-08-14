@@ -54,6 +54,18 @@ public class EditBookingClient extends Client implements Scenario {
 		// update section
 		CreateBooking createBooking = addOperationResult.getValue1();
 
+		ResponseEntity<String> result = editBooking(recordIdToUpdate, createBooking, secureRandom, restTemplate).getValue0();
+
+		if (result.getStatusCode() != HttpStatus.OK) {
+			LOG.error("create booking client operation was not successful");
+		}
+
+	}
+
+	public static Pair<ResponseEntity<String>, EditBooking> editBooking(
+			String recordIdToUpdate, CreateBooking createBooking,
+			SecureRandom secureRandom, RestTemplate restTemplate) {
+
 		EditBooking editBooking = new EditBooking();
 		editBooking.setPickupTime(createBooking.getPickupTime().plusMinutes(10));
 		editBooking.setAsap(true);
@@ -73,11 +85,6 @@ public class EditBookingClient extends Client implements Scenario {
 
 		HttpEntity<EditBooking> httpEntity = new HttpEntity<>(editBooking);
 
-		ResponseEntity<String> result =
-				restTemplate.exchange("http://localhost:8081/bookings/" + recordIdToUpdate, HttpMethod.PUT, httpEntity, String.class);
-		if (result.getStatusCode() != HttpStatus.OK) {
-			LOG.error("create booking client operation was not successful");
-		}
-
+		return Pair.with(restTemplate.exchange("http://localhost:8081/bookings/" + recordIdToUpdate, HttpMethod.PUT, httpEntity, String.class), editBooking);
 	}
 }

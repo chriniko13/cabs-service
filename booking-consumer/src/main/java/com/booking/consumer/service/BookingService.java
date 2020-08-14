@@ -97,7 +97,7 @@ public class BookingService {
 					}
 				});
 			} catch (RecordNotExistsException e) {
-				LOG.info(" >>> " + context.getRetryCount() + " " + context.isExhaustedOnly());
+				LOG.debug(" >>> " + context.getRetryCount() + " --- " + context.isExhaustedOnly());
 
 				if (context.getRetryCount() == RETRY_MAX_ATTEMPTS - 1 && redelivered) {
 					/*
@@ -139,8 +139,6 @@ public class BookingService {
 						booking.setPrice(editBooking.getPrice());
 						booking.setRating(editBooking.getRating());
 
-						booking.removeAllTripWaypoints();
-
 						List<TripWaypoint> tripWaypoints = getTripWaypoints(editBooking);
 
 						booking.addTripWayPoint(tripWaypoints);
@@ -149,7 +147,7 @@ public class BookingService {
 				});
 			} catch (RecordNotExistsException e) {
 
-				LOG.info(" >>> " + context.getRetryCount() + " " + context.isExhaustedOnly());
+				LOG.debug(" >>> " + context.getRetryCount() + " " + context.isExhaustedOnly());
 
 				if (context.getRetryCount() == RETRY_MAX_ATTEMPTS - 1 && redelivered) {
 					/*

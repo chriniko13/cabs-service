@@ -10,9 +10,11 @@ import org.springframework.amqp.core.Message;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 import java.util.function.Consumer;
 
 /*
@@ -27,12 +29,24 @@ public class MessageAuditConsumer extends EntityMessageConsumer<BookingOperation
 	private final AuditService auditService;
 
 	private final int batchSize = 25;
-	private final List<Pair<BookingOperationMessage, Map<String, Object>>> entries = new LinkedList<>();
+	private final ConcurrentLinkedQueue<Pair<BookingOperationMessage, Map<String, Object>>> entries = new ConcurrentLinkedQueue<>();
 
 	protected MessageAuditConsumer(ObjectMapper objectMapper, AuditService auditService, RabbitTemplate rabbitTemplate) {
 		super(objectMapper, BookingOperationMessage.class, rabbitTemplate);
 
 		this.auditService = auditService;
+
+		ScheduledExecutorService scheduledExecutorService = Executors.newSingleThreadScheduledExecutor();
+		scheduledExecutorService.scheduleWithFixedDelay(
+				() -> {
+					Pair<BookingOperationMessage, Map<String, Object>> entry = entries.poll();
+					if (entry != null) {
+						this.auditService.save(entry);
+					}
+				}, 20, 5, TimeUnit.MILLISECONDS
+		);
+
+		Runtime.getRuntime().addShutdownHook(new Thread(scheduledExecutorService::shutdown));
 	}
 
 	@Override protected Logger getLogger() {
@@ -46,17 +60,7 @@ public class MessageAuditConsumer extends EntityMessageConsumer<BookingOperation
 			BookingOperationMessage bookingOperationMessage = read(body);
 			LOG.debug("will try to capture business operation");
 
-			if (entries.size() % batchSize == 0) {
-				auditService.save(entries);
-				entries.clear();
-			}
-
 			entries.add(Pair.with(bookingOperationMessage, message.getMessageProperties().getHeaders()));
-
-			if (entries.size() % batchSize == 0) {
-				auditService.save(entries);
-				entries.clear();
-			}
 		};
 	}
 

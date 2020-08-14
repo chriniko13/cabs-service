@@ -25,7 +25,7 @@ public class CreateBookingClient extends Client implements Scenario {
 		super(restTemplate, secureRandom, objectMapper);
 	}
 
-	public static Pair<ResponseEntity<String>, CreateBooking> createBooking(SecureRandom secureRandom, RestTemplate restTemplate) {
+	public static Pair<ResponseEntity<String/*Note: response stringified*/>, CreateBooking> createBooking(SecureRandom secureRandom, RestTemplate restTemplate) {
 
 		CreateBooking createBooking = new CreateBooking();
 		createBooking.setPassengerName("passenger " + UUID.randomUUID());

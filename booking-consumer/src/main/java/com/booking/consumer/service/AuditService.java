@@ -15,6 +15,7 @@ import org.springframework.transaction.TransactionStatus;
 import org.springframework.transaction.support.TransactionCallbackWithoutResult;
 import org.springframework.transaction.support.TransactionTemplate;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
@@ -35,7 +36,7 @@ public class AuditService {
 		this.objectMapper = objectMapper;
 	}
 
-	public void save(List<Pair<BookingOperationMessage, Map<String, Object>>> entries) {
+	public void save(Collection<Pair<BookingOperationMessage, Map<String, Object>>> entries) {
 
 		List<AuditEntry> entriesToSave = entries.stream().map(entry -> getAuditEntry(entry.getValue0(), entry.getValue1())).collect(Collectors.toList());
 
@@ -46,6 +47,15 @@ public class AuditService {
 			}
 		});
 
+	}
+
+	public void save(Pair<BookingOperationMessage, Map<String, Object>> entry) {
+		transactionTemplate.execute(new TransactionCallbackWithoutResult() {
+
+			@Override protected void doInTransactionWithoutResult(TransactionStatus status) {
+				auditEntryRepository.save(getAuditEntry(entry.getValue0(), entry.getValue1()));
+			}
+		});
 	}
 
 	private AuditEntry getAuditEntry(BookingOperationMessage bookingOperationMessage, Map<String, Object> headers) {
